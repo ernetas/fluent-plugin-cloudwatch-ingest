@@ -244,9 +244,10 @@ module Fluent::Plugin
                   "for group #{log_group_name} #{prefix_message}: "\
                   "#{boom.inspect}")
         metric(:increment, 'api.calls.describelogstreams.failed')
+        state.store.delete[log_group_name]
 
         sleep @error_interval
-        retry
+        next
       end
 
       log.info("Found #{log_streams.size} streams for #{log_group_name}")
